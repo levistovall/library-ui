@@ -1,0 +1,16 @@
+extends layout
+block content
+  h1=title
+  - var formaction = form_action 
+  form(method='POST' action=formaction id='authform')
+    div.form-group
+      label(for='email') Email Address:
+      input#email.form-control(type='text' placeholder='person@example.com' name='email' required='true' value='')
+      label(for='password') Password:
+      input#password.form-control(type='text' placeholder='' name='password' required='true' value='')
+    button.btn.btn-primary(type='submit' id='auth-call-btn') Submit
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg
+  script(src='/javascripts/auth_call.js')
