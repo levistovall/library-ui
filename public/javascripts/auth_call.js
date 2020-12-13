@@ -50,7 +50,7 @@ async function handleFormSubmit(event) {
 		 * but for this example we'll just log it to the console.
 		 */
 		console.log({ responseData });
-        $window.sessionStorage.accessToken = response.body.accessToken;
+        window.sessionStorage.accessToken = responseData.accessToken;
 
 	} catch (error) {
 		console.error(error);

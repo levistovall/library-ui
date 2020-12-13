@@ -47,13 +47,34 @@ exports.grantAccess = function(action, resource) {
 
 exports.allowIfLoggedin = async (req, res, next) => {
     try {
-        const user = res.locals.loggedInUser;
+        console.info(req.headers);
+        if(req.headers["authorization"]) {
+            var authHeader = req.headers["authorization"];
+            if (authHeader.startsWith("Bearer ")){
+               var accessToken  = authHeader.substring(7, authHeader.length);
+                const { userId, exp } = await jwt.verify(accessToken, process.env.JWT_SECRET);
+                // Check if token has expired
+                if (exp < Date.now().valueOf() / 1000) { 
+                    return res.status(401).json({ error: "JWT token has expired, please login to obtain a new one" });
+                } 
+                res.locals.loggedInUser = await User.findById(userId);
+                next();
+
+            } else {
+                alert("Bad Auth header.");
+            }
+        } else {
+            res.render('login', { title: 'Login', form_action: process.env.PROTOCOL+'://'+process.env.AUTH_SERVER_IP+':'+process.env.AUTH_SERVER_PORT+'/users/login' });
+        }
+        
+        
+        /*const user = res.locals.loggedInUser;
         if (!user) {
-            res.render('login', { title: 'Login', form_action: 'http://'+process.env.AUTH_SERVER_IP+':'+process.env.AUTH_SERVER_PORT+'/users/login' });
+            
         } else {
             req.user = user;
             next();
-        }
+        }*/
     } catch (error) {
         next(error);
     }

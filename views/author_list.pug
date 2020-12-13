@@ -6,7 +6,7 @@ block content
   ul
     each author in author_list
       li 
-        a(href=author.url) #{author.name} 
+        span.link(data-link=author.url) #{author.name} 
         |  (#{author.formatted_date_of_birth} - #{author.formatted_date_of_death})
 
     else
