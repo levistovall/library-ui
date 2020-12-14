@@ -9,9 +9,10 @@ var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
 
 const bodyParser = require('body-parser');
-require("dotenv").config({
+var env = require("dotenv").config({
  path: path.join(__dirname, "./.env")
 });
+require('dotenv-expand')(env);
 
 var app = express();
 //Set up mongoose connection
